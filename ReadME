@@ -1,0 +1,125 @@
+# BioDiffusion: Generative Modeling of Biomedical Signals using Diffusion Models
+
+This project implements a **deep learning framework for generating and analyzing biomedical time-series signals** using **Denoising Diffusion Probabilistic Models (DDPM)** and a **modified 1D U-Net architecture**. The main goal of the project is to address **data scarcity in healthcare AI** by generating realistic physiological signals such as ECG waveforms.
+
+The notebook `neural_network_research.ipynb` demonstrates the **complete workflow for training, evaluating, and visualizing diffusion-based generative models for 1D biomedical signals**.
+
+---
+
+# Project Overview
+
+Biomedical datasets often suffer from **limited data availability and class imbalance**, which can reduce the performance of machine learning models. This project explores **diffusion-based generative models** to synthesize realistic biomedical signals that can potentially augment training datasets.
+
+### Objectives
+
+- Generate **synthetic biomedical signals**
+- Improve **data availability for healthcare AI systems**
+- Compare **conditional vs unconditional diffusion models**
+- Evaluate **generative fidelity and model robustness**
+- Explore deep learning architectures for **time-series generation**
+
+---
+
+# Key Features
+
+- Implementation of **1D Diffusion Models (DDPM)**
+- Modified **1D U-Net architecture for time-series signals**
+- End-to-end **training and evaluation pipeline**
+- Signal visualization and comparison with real data
+- Dataset preprocessing and normalization
+- Model monitoring using **TensorBoard / Weights & Biases**
+- Experimental analysis of generative performance
+
+---
+
+# Technologies Used
+
+The project is implemented using the following tools and libraries:
+
+- **Python**
+- **PyTorch**
+- **NumPy**
+- **Matplotlib**
+- **Scikit-learn**
+- **UMAP**
+- **TensorBoard**
+- **Weights & Biases (wandb)**
+- **FastProgress / tqdm**
+
+---
+
+# Project Structure
+BioDiffusion/
+│
+├── neural_network_research.ipynb   # Main training and experimentation notebook
+├── modules/
+│   └── modules1D_cls_free.py       # Model architecture and diffusion utilities
+├── datasets/                        # Dataset files
+├── models/                          # Saved model checkpoints
+└── outputs/                         # Generated signals and results
+---
+
+# Model Architecture
+
+The model uses a **1D U-Net architecture adapted for time-series data**.
+
+### Key Architectural Components
+
+- Encoder–decoder structure
+- Residual connections
+- Temporal convolution layers
+- Diffusion timestep conditioning
+- Noise prediction network
+
+The diffusion model learns to **gradually denoise random noise into structured biomedical signals**, allowing it to generate realistic ECG-like waveforms.
+
+---
+
+# Training Procedure
+
+The training workflow includes the following steps:
+
+1. Dataset loading and preprocessing
+2. Signal normalization
+3. Train–test data splitting
+4. Diffusion noise scheduling
+5. Model training using **Adam optimizer**
+6. Logging training metrics
+7. Visualization of generated signals
+
+Training progress can be monitored using:
+
+- **TensorBoard**
+- **Weights & Biases**
+- **Progress bars with tqdm**
+
+---
+
+# Experimental Analysis
+
+The notebook investigates several research questions:
+
+- Can diffusion models generate **realistic biomedical signals**?
+- What are the differences between **conditional and unconditional architectures**?
+- How does the number of diffusion timesteps affect signal quality?
+- How stable is the model during long training runs?
+
+Generated signals are visualized and compared with real signals to evaluate **morphological similarity and fidelity**.
+
+# How to Run the Project
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/biodiffusion.git
+cd biodiffusion
+2. Install dependencies
+pip install torch torchvision numpy matplotlib scikit-learn tqdm wandb umap-learn
+3. Run the notebook
+
+Open the notebook:
+neural_network_research.ipynb
+using:
+	•	Jupyter Notebook
+	•	VS Code
+	•	Google Colab
