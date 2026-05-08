@@ -1,125 +1,221 @@
-# BioDiffusion: Generative Modeling of Biomedical Signals using Diffusion Models
-
-This project implements a **deep learning framework for generating and analyzing biomedical time-series signals** using **Denoising Diffusion Probabilistic Models (DDPM)** and a **modified 1D U-Net architecture**. The main goal of the project is to address **data scarcity in healthcare AI** by generating realistic physiological signals such as ECG waveforms.
-
-The notebook `neural_network_research.ipynb` demonstrates the **complete workflow for training, evaluating, and visualizing diffusion-based generative models for 1D biomedical signals**.
-
+<div align="center">
+<img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+<img src="https://img.shields.io/badge/Weights_&_Biases-FFBE00?style=for-the-badge&logo=weightsandbiases&logoColor=black"/>
+<img src="https://img.shields.io/badge/TensorBoard-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white"/>
+<img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge"/>
+<br/><br/>
+ 
+# 🫀 BioDiffusion
+ 
+### *Generative Modeling of Biomedical Signals using Diffusion Models*
+ 
+<p align="center">
+  <b>Synthesizing realistic physiological waveforms to address data scarcity in healthcare AI</b><br/>
+  Denoising Diffusion Probabilistic Models (DDPM) · 1D U-Net Architecture · ECG Signal Generation
+</p>
 ---
-
-# Project Overview
-
-Biomedical datasets often suffer from **limited data availability and class imbalance**, which can reduce the performance of machine learning models. This project explores **diffusion-based generative models** to synthesize realistic biomedical signals that can potentially augment training datasets.
-
-### Objectives
-
-- Generate **synthetic biomedical signals**
-- Improve **data availability for healthcare AI systems**
-- Compare **conditional vs unconditional diffusion models**
-- Evaluate **generative fidelity and model robustness**
-- Explore deep learning architectures for **time-series generation**
-
+ 
+</div>
+## 📌 Table of Contents
+ 
+- [Overview](#-overview)
+- [Motivation](#-motivation)
+- [Key Features](#-key-features)
+- [Architecture](#-architecture)
+- [Project Structure](#-project-structure)
+- [Results & Experiments](#-results--experiments)
+- [Quickstart](#-quickstart)
+- [Technologies](#-technologies)
+- [Roadmap](#-roadmap)
+- [Citation](#-citation)
 ---
-
-# Key Features
-
-- Implementation of **1D Diffusion Models (DDPM)**
-- Modified **1D U-Net architecture for time-series signals**
-- End-to-end **training and evaluation pipeline**
-- Signal visualization and comparison with real data
-- Dataset preprocessing and normalization
-- Model monitoring using **TensorBoard / Weights & Biases**
-- Experimental analysis of generative performance
-
+ 
+## 🧬 Overview
+ 
+**BioDiffusion** is a deep learning framework for **generating and analyzing biomedical time-series signals** using **Denoising Diffusion Probabilistic Models (DDPM)** paired with a **custom 1D U-Net architecture**.
+ 
+The core idea: instead of collecting more patient data (which is expensive, privacy-sensitive, and often imbalanced), we *generate* realistic synthetic physiological signals that can augment training datasets for downstream healthcare AI tasks.
+ 
+> 📓 The notebook `neural_network_research.ipynb` walks through the **complete pipeline** — from data preprocessing to training, evaluation, and signal visualization.
+ 
 ---
-
-# Technologies Used
-
-The project is implemented using the following tools and libraries:
-
-- **Python**
-- **PyTorch**
-- **NumPy**
-- **Matplotlib**
-- **Scikit-learn**
-- **UMAP**
-- **TensorBoard**
-- **Weights & Biases (wandb)**
-- **FastProgress / tqdm**
-
+ 
+## 💡 Motivation
+ 
+Biomedical datasets face three persistent challenges:
+ 
+| Challenge | Impact |
+|---|---|
+| 🔒 **Privacy restrictions** | Limited sharing of patient data |
+| ⚖️ **Class imbalance** | Rare conditions underrepresented |
+| 📉 **Data scarcity** | Small datasets lead to overfitting |
+ 
+Diffusion models offer a principled, high-fidelity approach to **synthetic data generation** — learning the true underlying distribution of physiological signals rather than producing simplistic interpolations.
+ 
 ---
-
-# Project Structure
+ 
+## ✨ Key Features
+ 
+- 🔁 **1D DDPM** — Full forward/reverse diffusion process adapted for time-series
+- 🏗️ **Custom 1D U-Net** — Encoder–decoder with residual blocks and temporal conv layers
+- 🎯 **Conditional & Unconditional Generation** — Class-free guidance support
+- 📊 **End-to-end Pipeline** — Preprocessing → Training → Sampling → Evaluation
+- 📈 **Experiment Tracking** — TensorBoard + Weights & Biases integration
+- 🔬 **UMAP Visualization** — Latent space analysis of real vs. generated signals
+- ⚡ **Progress Monitoring** — FastProgress / tqdm live feedback
+---
+ 
+## 🏛️ Architecture
+ 
+```
+Input Noise z_T  ──►  [Reverse Diffusion Process T → 0]  ──►  Synthetic ECG Signal
+                              │
+                    ┌─────────▼──────────┐
+                    │    1D U-Net DDPM   │
+                    │                    │
+                    │  Encoder           │
+                    │   │ Conv1D Blocks  │
+                    │   │ Downsampling   │
+                    │   ▼                │
+                    │  Bottleneck        │
+                    │   │ Timestep Emb.  │
+                    │   ▼                │
+                    │  Decoder           │
+                    │   │ Upsampling     │
+                    │   │ Residual Skip  │
+                    │   ▼                │
+                    │  Noise Prediction  │
+                    └────────────────────┘
+```
+ 
+### Architectural Highlights
+ 
+| Component | Description |
+|---|---|
+| **Encoder** | Temporal conv blocks with progressive downsampling |
+| **Bottleneck** | Timestep-conditioned feature representation |
+| **Decoder** | Symmetric upsampling with residual skip connections |
+| **Timestep Embedding** | Sinusoidal positional encoding of diffusion step *t* |
+| **Class Conditioning** | Optional class embeddings for guided generation |
+ 
+---
+ 
+## 📁 Project Structure
+ 
+```
 BioDiffusion/
 │
-├── neural_network_research.ipynb   # Main training and experimentation notebook
-├── modules/
-│   └── modules1D_cls_free.py       # Model architecture and diffusion utilities
-├── datasets/                        # Dataset files
-├── models/                          # Saved model checkpoints
-└── outputs/                         # Generated signals and results
+├── 📓 neural_network_research.ipynb   # Main training & experimentation notebook
+│
+├── 📦 modules/
+│   └── modules1D_cls_free.py          # Model architecture & diffusion utilities
+│
+├── 🗄️ datasets/                        # Raw & preprocessed dataset files
+│
+├── 💾 models/                          # Saved model checkpoints
+│
+└── 📤 outputs/                         # Generated signals & evaluation results
+```
+ 
 ---
-
-# Model Architecture
-
-The model uses a **1D U-Net architecture adapted for time-series data**.
-
-### Key Architectural Components
-
-- Encoder–decoder structure
-- Residual connections
-- Temporal convolution layers
-- Diffusion timestep conditioning
-- Noise prediction network
-
-The diffusion model learns to **gradually denoise random noise into structured biomedical signals**, allowing it to generate realistic ECG-like waveforms.
-
+ 
+## 🔬 Results & Experiments
+ 
+The notebook investigates the following research questions:
+ 
+- ✅ Can DDPMs generate **morphologically faithful** ECG waveforms?
+- ✅ How do **conditional vs. unconditional** models compare in signal fidelity?
+- ✅ How does **diffusion timestep count** (*T*) affect generation quality?
+- ✅ How stable is training over **extended runs**?
+Generated signals are compared against real physiological recordings using:
+- 📉 Visual waveform overlays
+- 🗺️ UMAP latent space projections
+- 📐 Morphological similarity metrics
 ---
-
-# Training Procedure
-
-The training workflow includes the following steps:
-
-1. Dataset loading and preprocessing
-2. Signal normalization
-3. Train–test data splitting
-4. Diffusion noise scheduling
-5. Model training using **Adam optimizer**
-6. Logging training metrics
-7. Visualization of generated signals
-
-Training progress can be monitored using:
-
-- **TensorBoard**
-- **Weights & Biases**
-- **Progress bars with tqdm**
-
----
-
-# Experimental Analysis
-
-The notebook investigates several research questions:
-
-- Can diffusion models generate **realistic biomedical signals**?
-- What are the differences between **conditional and unconditional architectures**?
-- How does the number of diffusion timesteps affect signal quality?
-- How stable is the model during long training runs?
-
-Generated signals are visualized and compared with real signals to evaluate **morphological similarity and fidelity**.
-
-# How to Run the Project
-
-### 1. Clone the repository
-
+ 
+## 🚀 Quickstart
+ 
+### 1. Clone the Repository
+ 
 ```bash
-git clone https://github.com/yourusername/biodiffusion.git
-cd biodiffusion
-2. Install dependencies
-pip install torch torchvision numpy matplotlib scikit-learn tqdm wandb umap-learn
-3. Run the notebook
-
-Open the notebook:
-neural_network_research.ipynb
-using:
-	•	Jupyter Notebook
-	•	VS Code
-	•	Google Colab
+git clone https://github.com/AmanKumar-23/BioDiffusion-Diffusion-Based-Generative-Model-for-Physiological-Stress-Signals.git
+cd BioDiffusion
+```
+ 
+### 2. Install Dependencies
+ 
+```bash
+pip install torch torchvision numpy matplotlib scikit-learn tqdm wandb umap-learn fastprogress
+```
+ 
+> ⚠️ GPU recommended. Tested with Python 3.9+ and PyTorch 2.x.
+ 
+### 3. Launch the Notebook
+ 
+Open `neural_network_research.ipynb` using your preferred environment:
+ 
+```bash
+# Jupyter Notebook
+jupyter notebook neural_network_research.ipynb
+ 
+# VS Code
+code .
+# Then open the .ipynb file from the Explorer panel
+ 
+# Google Colab
+# Upload the notebook or open directly from GitHub
+```
+ 
+---
+ 
+## 🛠️ Technologies
+ 
+<div align="center">
+| Category | Tools |
+|---|---|
+| **Deep Learning** | PyTorch |
+| **Data Processing** | NumPy, Scikit-learn |
+| **Visualization** | Matplotlib, UMAP |
+| **Experiment Tracking** | TensorBoard, Weights & Biases |
+| **Progress Monitoring** | tqdm, FastProgress |
+| **Language** | Python 3.9+ |
+ 
+</div>
+---
+ 
+## 🗺️ Roadmap
+ 
+- [x] 1D DDPM implementation
+- [x] U-Net backbone for time-series
+- [x] Classifier-free guidance
+- [x] W&B + TensorBoard logging
+- [ ] FID-equivalent metric for biomedical signals
+- [ ] Multi-lead ECG generation
+- [ ] Conditional generation on patient metadata
+- [ ] Web demo with Gradio / Streamlit
+---
+ 
+## 📎 Citation
+ 
+If you use this work in your research, please cite:
+ 
+```bibtex
+@misc{biodiffusion2024,
+  author       = {Aman Kumar},
+  title        = {BioDiffusion: Generative Modeling of Biomedical Signals using Diffusion Models},
+  year         = {2024},
+  publisher    = {GitHub},
+  url          = {https://github.com/AmanKumar-23/BioDiffusion-Diffusion-Based-Generative-Model-for-Physiological-Stress-Signals.}
+}
+```
+ 
+---
+ 
+<div align="center">
+**Made with ❤️ and a lot of diffusion steps**
+ 
+⭐ Star this repo if you find it useful — it helps others discover it!
+ 
+</div>
+ 
